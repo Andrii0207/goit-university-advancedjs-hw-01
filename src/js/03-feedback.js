@@ -1,5 +1,5 @@
 
-import throttle from 'lodash.throttle'
+import throttle from 'lodash.throttle';
 
 const refs = {
     form: document.querySelector(".feedback-form"),
@@ -8,49 +8,41 @@ const refs = {
 }
 
 
-refs.form.addEventListener("input", throttle(handlerData, 500))
-refs.form.addEventListener("submit", onSubmit)
+refs.form.addEventListener("input", throttle(handlerData, 500));
+refs.form.addEventListener("submit", onSubmit);
 
 const LS_KEY = "feedback-form-state";
-const formData = {}
+let formData = JSON.parse(localStorage.getItem(LS_KEY)) || {};
 
-readDataLS()
+readDataLS();
 
-
-function handlerData() {
-    formData[refs.email.name] = refs.email.value
-    formData[refs.textaria.name] = refs.textaria.value
-
+function handlerData(evt) {
+    formData[evt.target.name] = evt.target.value
     localStorage.setItem(LS_KEY, JSON.stringify(formData))
-}
+};
 
 
 function onSubmit(evt) {
     evt.preventDefault();
 
-    const formDataInput = evt.currentTarget.elements
-    const inputDataValue = formDataInput.email.value
-    const textariaDataValue = formDataInput.message.value
+    const { email, message } = evt.currentTarget.elements;
 
-    if (inputDataValue === "" || textariaDataValue === "") {
-        alert("Please, fill in all fields the form")
-        return
+    if (email.value === "" || message.value === "") {
+        alert("Please, fill in all fields the form");
+        return;
     }
-
     refs.form.reset()
-    localStorage.removeItem(LS_KEY)
+    localStorage.removeItem(LS_KEY);
+    console.log(formData);
+    formData = {};
 }
 
 function readDataLS() {
-    const readDataLS = JSON.parse(localStorage.getItem(LS_KEY))
+    const readDataLS = JSON.parse(localStorage.getItem(LS_KEY));
 
     if (readDataLS) {
-        refs.textaria.textContent = readDataLS.message || "";
-        refs.email.textContent = readDataLS.email || "";
-
-        console.log(readDataLS)
-        console.log("email >>>", readDataLS.email)
-        console.log("message >>>", readDataLS.message)
-    }
-}
+        refs.textaria.value = readDataLS.message || "";
+        refs.email.value = readDataLS.email || "";
+    };
+};
 
