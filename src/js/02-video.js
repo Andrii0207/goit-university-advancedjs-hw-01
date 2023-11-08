@@ -7,7 +7,7 @@ const LS_KEY = "videoplayer-current-time";
 const currentTime = JSON.parse(localStorage.getItem(LS_KEY))
 const player = new Player(iframe);
 
-player.on('timeupdate', throttle(onPlay, 500))
+player.on('timeupdate', throttle(onPlay, 1000))
 
 function onPlay({ seconds }) {
     localStorage.setItem(LS_KEY, JSON.stringify(seconds))
