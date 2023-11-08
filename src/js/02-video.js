@@ -7,7 +7,7 @@ const LS_KEY = "videoplayer-current-time";
 const currentTime = JSON.parse(localStorage.getItem(LS_KEY))
 const player = new Player(iframe);
 
-player.on('play', throttle(onPlay, 1000))
+player.on('timeupdate', throttle(onPlay, 500))
 
 function onPlay({ seconds }) {
     localStorage.setItem(LS_KEY, JSON.stringify(seconds))
@@ -15,7 +15,9 @@ function onPlay({ seconds }) {
 
 player
     .setCurrentTime(currentTime)
-    .then(function (seconds) {
-        localStorage.setItem(LS_KEY, JSON.stringify(seconds))
+    .then(function (currentTime) {
+        localStorage.setItem(LS_KEY, JSON.stringify(currentTime))
     })
-    .catch(function (err) { console.log(err) }) 
+    .catch(function (err) {
+        console.log(err)
+    }) 
